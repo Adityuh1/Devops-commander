@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DevopsCommander.McpServer/DevopsCommander.McpServer.csproj" />
+    <Project Path="src/DevopsCommander.Shared/DevopsCommander.Shared.csproj" />
+    <Project Path="src/DevopsCommander.Worker/DevopsCommander.Worker.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DevopsCommander.Tests/DevopsCommander.Tests.csproj" />
+  </Folder>
+</Solution>
