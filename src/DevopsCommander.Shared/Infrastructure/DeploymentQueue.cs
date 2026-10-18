@@ -1,8 +1,9 @@
 using System;
+using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using DevopsCommander.Shared.Models;
 using DevopsCommander.Shared.Interfaces;
+using DevopsCommander.Shared.Models;
 
 namespace DevopsCommander.Shared.Infrastructure
 {
@@ -24,17 +25,27 @@ namespace DevopsCommander.Shared.Infrastructure
             _channel = Channel.CreateBounded<DeployRequest>(options);
         }
 
-        public async Task EnqueueAsync(DeployRequest request)
+        public async Task EnqueueAsync(DeployRequest request, CancellationToken cancellationToken = default)
         {
             if (request == null) throw new ArgumentNullException(nameof(request));
-            await _channel.Writer.WriteAsync(request);
+            await _channel.Writer.WriteAsync(request, cancellationToken);
         }
 
-        public async Task<DeployRequest?> DequeueAsync()
+        public async Task<DeployRequest?> DequeueAsync(CancellationToken cancellationToken = default)
         {
-            // Wait for an item or completion.
-            var result = await _channel.Reader.ReadAsync();
-            return result;
+            try
+            {
+                var result = await _channel.Reader.ReadAsync(cancellationToken);
+                return result;
+            }
+            catch (ChannelClosedException)
+            {
+                return null;
+            }
+            catch (OperationCanceledException)
+            {
+                return null;
+            }
         }
 
         public void Complete()
@@ -46,9 +57,16 @@ namespace DevopsCommander.Shared.Infrastructure
         {
             _channel.Writer.Complete();
             // Drain remaining items if any.
-            while (await _channel.Reader.WaitToReadAsync())
+            try
             {
-                while (_channel.Reader.TryRead(out _)) { }
+                while (await _channel.Reader.WaitToReadAsync())
+                {
+                    while (_channel.Reader.TryRead(out _)) { }
+                }
+            }
+            catch
+            {
+                // Channel closed or cancelled
             }
         }
     }

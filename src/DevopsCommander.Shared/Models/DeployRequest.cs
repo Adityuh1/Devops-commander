@@ -7,6 +7,11 @@ namespace DevopsCommander.Shared.Models;
 public sealed record DeployRequest
 {
     /// <summary>
+    /// Unique identifier for this deployment. If not provided, one is assigned on creation.
+    /// </summary>
+    public Guid? DeploymentId { get; init; }
+
+    /// <summary>
     /// Human-readable name for the project being deployed (e.g., "my-web-app").
     /// </summary>
     public required string ProjectName { get; init; }
