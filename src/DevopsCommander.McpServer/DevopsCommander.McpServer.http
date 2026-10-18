@@ -1,6 +1,70 @@
-@DevopsCommander.McpServer_HostAddress = http://localhost:5076
+@HostAddress = http://localhost:5076
+@DeploymentId = 00000000-0000-0000-0000-000000000000
 
-GET {{DevopsCommander.McpServer_HostAddress}}/weatherforecast/
+### 1. Enqueue a Valid Container Deployment
+POST {{HostAddress}}/api/deploy
+Content-Type: application/json
 Accept: application/json
 
-###
+{
+  "projectName": "shopping-cart-service",
+  "environment": "staging",
+  "region": "us-east-1",
+  "infrastructureType": "container",
+  "parameters": {
+    "replica_count": "2",
+    "container_image": "nginx:alpine"
+  },
+  "requestedBy": "professor-viva-demo"
+}
+
+### 2. Fast-Fail Validation Test (Missing Environment and Region)
+# Expected: HTTP 400 Bad Request with descriptive validation error
+POST {{HostAddress}}/api/deploy
+Content-Type: application/json
+
+{
+  "projectName": "invalid-service",
+  "infrastructureType": "container"
+}
+
+### 3. Check Deployment Status & Execution Logs by ID
+# Replace the ID below with the deploymentId received from Request #1
+GET {{HostAddress}}/api/deploy/{{DeploymentId}}
+Accept: application/json
+
+### 4. List All Historical & Active Deployments
+GET {{HostAddress}}/api/deployments
+Accept: application/json
+
+### 5. AI Agent: List Available MCP Tools
+GET {{HostAddress}}/mcp/tools
+Accept: application/json
+
+### 6. AI Agent: Invoke MCP Tool "deploy_infrastructure"
+POST {{HostAddress}}/mcp/tools/call
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "deploy_infrastructure",
+  "arguments": {
+    "projectName": "ai-analytics-pipeline",
+    "environment": "production",
+    "region": "eu-central-1",
+    "infrastructureType": "vm",
+    "parameters": {
+      "instance_type": "t3.large"
+    }
+  }
+}
+
+### 7. AI Agent: Invoke MCP Tool "list_deployments"
+POST {{HostAddress}}/mcp/tools/call
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "list_deployments",
+  "arguments": {}
+}

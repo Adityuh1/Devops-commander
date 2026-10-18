@@ -12,6 +12,9 @@ builder.Services.AddOpenApi();
 // Register DevOps Commander Shared Services (SQLite store + Channel queue)
 builder.Services.AddDevopsCommanderServices();
 
+// Host the background worker directly inside the API process for all-in-one execution
+builder.Services.AddHostedService<DevopsCommander.Worker.Worker>();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DevopsCommander.Shared\DevopsCommander.Shared.csproj" />
+    <ProjectReference Include="..\DevopsCommander.Worker\DevopsCommander.Worker.csproj" />
   </ItemGroup>
 
 </Project>

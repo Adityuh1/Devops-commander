@@ -16,6 +16,7 @@ namespace DevopsCommander.Shared.Infrastructure
             services.AddSingleton<IDeploymentStore>(_ => new SqliteDeploymentStore(connectionString));
             services.AddSingleton<IDeploymentQueue>(_ => new ChannelDeploymentQueue(queueCapacity));
             services.AddSingleton<ITerraformRunner>(_ => new TerraformRunner());
+            services.AddSingleton<IDeploymentWorkflowEngine, DurableDeploymentWorkflowEngine>();
             return services;
         }
     }
