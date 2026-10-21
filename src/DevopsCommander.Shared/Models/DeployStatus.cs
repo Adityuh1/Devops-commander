@@ -2,7 +2,7 @@ namespace DevopsCommander.Shared.Models;
 
 /// <summary>
 /// The lifecycle status of a deployment job.
-/// Transitions: Pending → Provisioning → Completed | Failed | Cancelled
+/// Transitions: Pending → Provisioning → Completed | Failed | Cancelled | Destroying | Destroyed
 /// </summary>
 public enum DeployStatus
 {
@@ -19,5 +19,11 @@ public enum DeployStatus
     Failed,
 
     /// <summary>Deployment was cancelled before or during execution.</summary>
-    Cancelled
+    Cancelled,
+
+    /// <summary>Resources are actively being torn down via terraform destroy.</summary>
+    Destroying,
+
+    /// <summary>All cloud resources have been cleanly destroyed and removed.</summary>
+    Destroyed
 }

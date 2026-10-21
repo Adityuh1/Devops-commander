@@ -33,7 +33,7 @@ public sealed class DeploymentState
     public DateTimeOffset? StartedAt { get; set; }
 
     /// <summary>
-    /// UTC timestamp when the deployment reached a terminal state (Completed, Failed, Cancelled).
+    /// UTC timestamp when the deployment reached a terminal state (Completed, Failed, Cancelled, Destroyed).
     /// Null if still in progress.
     /// </summary>
     public DateTimeOffset? FinishedAt { get; set; }
@@ -43,6 +43,12 @@ public sealed class DeploymentState
     /// The worker appends entries as it transitions between phases.
     /// </summary>
     public List<ExecutionLogEntry> ExecutionLog { get; init; } = [];
+
+    /// <summary>
+    /// Key-value outputs produced by Terraform after successful provisioning
+    /// (e.g. live_website_url, bucket_name, aws_console_url, cluster_identifier).
+    /// </summary>
+    public Dictionary<string, string> Outputs { get; set; } = new();
 
     /// <summary>
     /// If the deployment failed, this contains the top-level error message.

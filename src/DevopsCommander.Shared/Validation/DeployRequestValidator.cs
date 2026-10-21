@@ -18,7 +18,8 @@ namespace DevopsCommander.Shared.Validation
 
         private static readonly HashSet<string> AllowedInfrastructureTypes = new(StringComparer.OrdinalIgnoreCase)
         {
-            "container", "vm", "virtualmachine", "serverless"
+            "container", "vm", "virtualmachine", "serverless",
+            "aws_s3", "s3", "aws_webapp", "aws_ec2", "aws"
         };
 
         private static readonly Regex ProjectNameRegex = new(@"^[a-zA-Z0-9\-_]{2,64}$", RegexOptions.Compiled);
@@ -59,13 +60,13 @@ namespace DevopsCommander.Shared.Validation
 
             if (string.IsNullOrWhiteSpace(request.InfrastructureType))
             {
-                return Result<DeployRequest>.Failure("InfrastructureType is required (e.g., 'container', 'vm', 'serverless').");
+                return Result<DeployRequest>.Failure("InfrastructureType is required (e.g., 'aws_s3', 'container', 'vm', 'serverless').");
             }
 
             if (!AllowedInfrastructureTypes.Contains(request.InfrastructureType.Trim()))
             {
                 return Result<DeployRequest>.Failure(
-                    $"Invalid InfrastructureType '{request.InfrastructureType}'. Allowed values are: 'container', 'vm', 'serverless'.");
+                    $"Invalid InfrastructureType '{request.InfrastructureType}'. Allowed values are: 'aws_s3', 'container', 'vm', 'serverless'.");
             }
 
             return Result<DeployRequest>.Success(request);
