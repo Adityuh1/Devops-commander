@@ -1,5 +1,7 @@
 # DevOps Commander 🚀
 
+> 📖 **Have an exam or viva today? Check out the [Complete Viva & Exam Guide (Simple English)](VIVA_GUIDE.md)!**
+
 > **AI-Powered DevOps Infrastructure Orchestrator built with .NET 10, Minimal APIs, System.Threading.Channels, SQLite, and Terraform.**
 
 DevOps Commander is an autonomous infrastructure provisioning engine implementing the **Model Context Protocol (MCP)**. It bridges AI assistants (such as **GitHub Copilot** and **Claude Desktop**) with automated cloud infrastructure pipelines, executing, streaming, and auditing cloud deployments via Terraform.
@@ -109,19 +111,31 @@ All **48 automated unit and integration tests** will execute and pass.
 ```bash
 dotnet run --project src/DevopsCommander.McpServer
 ```
-The server will start listening on `http://localhost:5076` (and `https://localhost:7289`). The background worker automatically starts within the same process.
+The server will start listening on `http://localhost:5076`.
+- 🌐 **Web Control Plane Dashboard**: Open [http://localhost:5076](http://localhost:5076) in your browser!
+- 📖 **Interactive API Reference**: [http://localhost:5076/scalar/v1](http://localhost:5076/scalar/v1)
 
 ### 3. Run Live Interactive Demo Script
-In a separate terminal:
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts/demo.ps1
+In your terminal, simply execute our all-in-one demo runner:
+
+```bash
+./run_demo.sh
 ```
+Or for non-interactive automated presentation mode:
+```bash
+./run_demo.sh --auto
+```
+
 The script will:
-1. Enqueue a deployment via `POST /api/deploy`.
-2. Display the received HTTP `202 Accepted` and `DeploymentId`.
-3. Poll `GET /api/deploy/{id}` in real-time.
-4. Stream live Terraform execution logs directly from the SQLite database.
-5. Print completion status.
+1. Verify server health on port `5076` (auto-starting if needed).
+2. Execute all **48 automated unit & integration tests**.
+3. Enqueue a live cloud deployment via `POST /api/deploy`.
+4. Display the received HTTP `202 Accepted` and `DeploymentId`.
+5. Poll `GET /api/deploy/{id}` in real-time.
+6. Stream live Terraform execution logs directly from SQLite with phase tags.
+7. Test AI **Model Context Protocol (MCP)** tool invocation.
+8. Dump audit records from `deployments.db`.
+9. Launch the Web Dashboard in your browser.
 
 ---
 

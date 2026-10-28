@@ -51,6 +51,11 @@ CodeCoverage/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+# SQLite Databases
+*.db
+*.db-shm
+*.db-wal
+
 # NUnit
 *.VisualState.xml
 TestResult.xml

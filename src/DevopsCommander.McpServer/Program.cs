@@ -3,6 +3,7 @@ using DevopsCommander.Shared.Infrastructure;
 using DevopsCommander.Shared.Interfaces;
 using DevopsCommander.Shared.Models;
 using DevopsCommander.Shared.Validation;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +21,19 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
+
+// ── Web Dashboard ───────────────────────────────────────────────────
+app.MapGet("/", () => Results.Content(DevopsCommander.McpServer.Dashboard.Html, "text/html"))
+   .WithName("Dashboard")
+   .ExcludeFromDescription();
+
+app.MapGet("/dashboard", () => Results.Content(DevopsCommander.McpServer.Dashboard.Html, "text/html"))
+   .WithName("DashboardPage")
+   .ExcludeFromDescription();
 
 // ── REST API Endpoints ──────────────────────────────────────────────
 
